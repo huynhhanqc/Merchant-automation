@@ -8,6 +8,7 @@ playwright-report/
 # Debug artifacts
 debug-*.png
 *.png
+!tests/resources/avatar-black.png
 
 # Playwright
 /playwright-report/
