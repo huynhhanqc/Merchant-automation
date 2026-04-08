@@ -87,10 +87,10 @@ test.describe("PG Staff - Create", () => {
       .email({ provider: "hasaki.vn" })
       .toLowerCase();
     const sharedPhone = `09${faker.string.numeric(8)}`;
-    const sharedIdNumber =
-      faker.helpers.arrayElement([9, 12]) === 9
-        ? faker.string.numeric(9)
-        : faker.string.numeric(12);
+    const sharedIdNumber = faker.helpers.arrayElement([
+      faker.string.numeric(9),
+      faker.string.numeric(12),
+    ]);
 
     // First create a staff with a specific ID number
     await pgStaff.selectVendor(listVendor.V260064);

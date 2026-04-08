@@ -16,12 +16,9 @@ export class QuotationPage {
   }
 
   async goto(baseUrl: string) {
-    await this.page.goto(`${baseUrl}/quotation/detail`, {
-      waitUntil: "networkidle",
-    });
+    await this.page.goto(`${baseUrl}/quotation/detail`);
     await this.page.waitForSelector("form, .card, h1, h2", {
       state: "visible",
-      timeout: 15000,
     });
   }
 
@@ -112,7 +109,6 @@ export class QuotationPage {
   }
 
   async fillNote(note: string) {
-    await this.noteInput.waitFor({ state: "visible", timeout: 15000 });
     await this.noteInput.fill(note);
   }
 
@@ -249,21 +245,12 @@ export class QuotationPage {
         `tbody tr:nth-child(${rowIndex}) input[name*="quantity"], tbody tr:nth-child(${rowIndex}) input[name*="qty"], tbody tr:nth-child(${rowIndex}) input[type="number"]`,
       )
       .first();
-    await quantityInput.waitFor({ state: "visible", timeout: 15000 });
     await quantityInput.fill(String(qty));
   }
 
   async saveQuotation() {
-    await this.saveQuotationButton.waitFor({
-      state: "visible",
-      timeout: 15000,
-    });
     await this.saveQuotationButton.click();
-    await this.page.waitForLoadState("networkidle").catch(() => null);
-    await this.confirmSaveButtonQuotation.waitFor({
-      state: "visible",
-      timeout: 15000,
-    });
+    await this.confirmSaveButtonQuotation.waitFor({ state: "visible" });
     await this.confirmSaveButtonQuotation.click();
   }
 
@@ -273,9 +260,9 @@ export class QuotationPage {
       timeout: 50000,
     });
 
-    // Chờ page JS init hoàn toàn trước khi click
-    // (nếu click quá sớm, JS handler chưa bind → click thành GET request → 403)
-    await this.page.waitForLoadState("networkidle").catch(() => null);
+    // Wait for JS handlers to bind before clicking
+    // (clicking too early causes GET request instead of POST → 403)
+    await this.page.waitForLoadState("load");
 
     // Đăng ký handler cho native browser dialog (just in case)
     this.page.once("dialog", async (dialog) => {
@@ -284,9 +271,10 @@ export class QuotationPage {
 
     await this.requestToConfirmButton.click();
 
+    // Badge có thể dùng nhiều class khác nhau tuỳ version
     const badge = this.page
-      .locator("span.badge-warning")
-      .filter({ hasText: "Waiting For Confirm" });
+      .locator("span.badge-warning, span.badge-danger, span[class*='badge']")
+      .filter({ hasText: /Waiting For Confirm|Waiting for Confirm/i });
     const sweetAlertConfirm = this.page.locator(".swal2-confirm");
 
     // Race giữa SweetAlert xuất hiện vs badge xuất hiện thẳng (không có modal)
@@ -307,9 +295,18 @@ export class QuotationPage {
         .locator(".swal2-container, .swal2-popup")
         .waitFor({ state: "hidden", timeout: 10000 })
         .catch(() => null);
+    } else if (result === "timeout") {
+      // Cả swal lẫn badge đều không xuất hiện → thử click lại 1 lần
+      await this.page.waitForLoadState("networkidle").catch(() => null);
+      await this.requestToConfirmButton.click();
+      await this.page
+        .locator(".swal2-confirm")
+        .waitFor({ state: "visible", timeout: 10000 })
+        .then(() => this.page.locator(".swal2-confirm").click())
+        .catch(() => null);
     }
 
-    // Chờ badge "Waiting For Confirm" xuất hiện (nếu chưa có)
+    // Chờ badge "Waiting For Confirm" xuất hiện
     await badge.waitFor({ state: "visible", timeout: 30000 });
   }
 

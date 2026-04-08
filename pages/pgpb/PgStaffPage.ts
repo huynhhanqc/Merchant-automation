@@ -45,12 +45,12 @@ export class PgStaffPage {
         name: "Approve",
       })
       .first();
-    this.confirmActivateButton = page.getByRole("button", {
-      name: "Yes",
-    });
-    this.confirmApproveStaffButton = page.getByRole("button", {
-      name: "Approve",
-    });
+    this.confirmActivateButton = page.locator(
+      ".swal2-confirm, button.swal2-confirm",
+    );
+    this.confirmApproveStaffButton = page.locator(
+      ".swal2-confirm, button.swal2-confirm",
+    );
     this.rejectInfoStaffButton = page.getByRole("button", {
       name: "Reject",
     });
@@ -60,19 +60,10 @@ export class PgStaffPage {
   }
 
   async goto(baseUrl: string) {
-    await this.page.goto(`${baseUrl}/promoter/pg-draft/create`, {
-      waitUntil: "networkidle",
-    });
-    await this.page.waitForSelector("form", {
-      state: "visible",
-      timeout: 15000,
-    });
+    await this.page.goto(`${baseUrl}/promoter/pg-draft/create`);
     await this.page.waitForSelector(
       'input[name="name"], input[name="email"], input[name="phone"], input[name="cmnd"], input[name="address"], select[name="workType"]',
-      {
-        state: "visible",
-        timeout: 15000,
-      },
+      { state: "visible" },
     );
   }
 
@@ -81,29 +72,24 @@ export class PgStaffPage {
   }
 
   async fillEmail(email: string) {
-    await this.emailInput.first().waitFor({ state: "visible", timeout: 15000 });
     await this.emailInput.first().fill(email);
   }
 
   async fillPhone(phone: string) {
-    await this.phoneInput.first().waitFor({ state: "visible", timeout: 15000 });
     await this.phoneInput.first().fill(phone);
   }
 
   async fillIdNumber(idNumber: string) {
-    await this.idNumberInput.waitFor({ state: "visible", timeout: 30000 });
     await this.idNumberInput.scrollIntoViewIfNeeded();
     await this.idNumberInput.fill(idNumber);
   }
 
   async fillAddress(address: string) {
-    await this.addressInput.waitFor({ state: "visible", timeout: 15000 });
     await this.addressInput.scrollIntoViewIfNeeded();
     await this.addressInput.fill(address);
   }
 
   async fillNote(note: string) {
-    await this.noteInput.waitFor({ state: "visible", timeout: 15000 });
     await this.noteInput.scrollIntoViewIfNeeded();
     await this.noteInput.fill(note);
   }
@@ -318,8 +304,16 @@ export class PgStaffPage {
   }
 
   async getValidationErrors() {
+    // Wait a moment for errors to render after submit
+    await this.page.waitForTimeout(1000);
     const errors = await this.page
-      .locator(".text-danger, .invalid-feedback, .ant-form-item-explain")
+      .locator(
+        ".text-danger, .invalid-feedback, .ant-form-item-explain, " +
+          ".alert-danger, .alert.alert-danger, " +
+          ".swal2-html-container, .swal2-content, " +
+          ".toast-error, .toast-message, " +
+          "[class*='error'], [class*='Error']",
+      )
       .allTextContents();
     return errors.map((x) => x.trim()).filter(Boolean);
   }
@@ -329,12 +323,18 @@ export class PgStaffPage {
       state: "visible",
       timeout: 60000,
     });
+    // Wait for JS handlers to bind before clicking (same issue as requestToConfirm)
+    await this.page.waitForLoadState("load");
     await this.requestToActivateButton.click();
     await this.confirmActivateButton.waitFor({
       state: "visible",
-      timeout: 60000,
+      timeout: 15000,
     });
     await this.confirmActivateButton.click();
+    await this.page
+      .locator(".swal2-container")
+      .waitFor({ state: "hidden", timeout: 10000 })
+      .catch(() => null);
   }
 
   async approveInfoStaffButtonClick() {
@@ -342,12 +342,17 @@ export class PgStaffPage {
       state: "visible",
       timeout: 60000,
     });
+    await this.page.waitForLoadState("load");
     await this.approveInfoStaffButton.click();
     await this.confirmApproveStaffButton.waitFor({
       state: "visible",
-      timeout: 30000,
+      timeout: 15000,
     });
     await this.confirmApproveStaffButton.click();
+    await this.page
+      .locator(".swal2-container")
+      .waitFor({ state: "hidden", timeout: 10000 })
+      .catch(() => null);
   }
 
   async rejectInfoStaffButtonClick() {
@@ -355,19 +360,21 @@ export class PgStaffPage {
       state: "visible",
       timeout: 30000,
     });
-    await this.rejectInfoStaffButton.dblclick();
+    await this.page.waitForLoadState("load");
+    await this.rejectInfoStaffButton.click();
+    // Chờ modal reject mở ra (textarea chuyển từ hidden → visible)
+    await this.modalInputRejectReason.waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
   }
 
   async inputRejectReason(reason: string) {
-    await this.modalInputRejectReason.waitFor({
-      state: "visible",
-      timeout: 30000,
-    });
-    await this.modalInputRejectReason.click();
+    // Modal đã mở từ rejectInfoStaffButtonClick, điền thẳng vào textarea
     await this.modalInputRejectReason.fill(reason);
     await this.confirmRejectStaffButton.waitFor({
       state: "visible",
-      timeout: 30000,
+      timeout: 15000,
     });
     await this.confirmRejectStaffButton.click();
   }

@@ -33,6 +33,10 @@ export default defineConfig({
   use: {
     /* Fixed viewport — works both locally and headless on Linux CI */
     viewport: { width: 1920, height: 1080 },
+    /* Global timeout for each action (click, fill, waitFor...) */
+    actionTimeout: 15000,
+    /* Global timeout for navigation */
+    navigationTimeout: 60000,
     /* Collect trace on first retry to help debug failures */
     trace: "on-first-retry",
     /* Screenshot on failure */
