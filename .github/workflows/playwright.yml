@@ -1,0 +1,65 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  # Cho phép chạy thủ công từ GitHub UI
+  workflow_dispatch:
+    inputs:
+      test_grep:
+        description: "Filter tests by name (e.g. @smoke)"
+        required: false
+        default: ""
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers (Chromium only for CI)
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test ${{ github.event.inputs.test_grep && format('--grep "{0}"', github.event.inputs.test_grep) || '' }}
+        env:
+          CI: true
+          BASE_URL: ${{ secrets.BASE_URL }}
+          LOGIN_USER_ADMIN: ${{ secrets.LOGIN_USER_ADMIN }}
+          LOGIN_PASS_ADMIN: ${{ secrets.LOGIN_PASS_ADMIN }}
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload JUnit results
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: junit-results-${{ github.run_id }}
+          path: test-results/junit.xml
+          retention-days: 30
+
+      - name: Upload failure screenshots & traces
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-failures-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7

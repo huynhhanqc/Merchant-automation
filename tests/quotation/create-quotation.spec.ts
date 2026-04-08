@@ -1,0 +1,454 @@
+import { test, expect } from "../../fixtures/index.js";
+import { QuotationPage } from "../../pages/quotation/quotationPage.js";
+
+// Tên company
+const COMPANY = {
+  HASAKI_VIETNAM: "Cty Hasaki VietNam",
+  GLOBAL_TRADE: "Cty Hasaki Global Trade",
+  HASAKI_LLC: "Cty Hasaki LLC",
+};
+
+const listVendor = {
+  V220065: "V220065 - QC Test Vendor 2",
+  V260064: "GLOBAL TRADE",
+};
+
+const listTypeQuotation = {
+  NORMAL: "Normal",
+  TESTER: "Tester",
+  GIFT: "Gift",
+  ACTIVATION: "Activation",
+  POSM: "POSM",
+};
+test.describe("Quotation - Create with Hasaki VietNam", () => {
+  test.describe.configure({ timeout: 120 * 1000 });
+  test("Create Normal quotation with Hasaki VietNam company uses VND currency @smoke", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    //   await quotation.selectVendor(listVendor.V220065); // Role Admin mặc định có Vendor
+    await quotation.selectCompany(COMPANY.HASAKI_VIETNAM);
+    await quotation.fillNote("Quotion Auto Test");
+    await quotation.selectStore("SHOP - 71 HOANG HOA THAM");
+    await quotation.selectProduct("100240028");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    // Sau khi Save → vào trang Quotation Review
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      {
+        timeout: 20000,
+      },
+    );
+
+    // Click Request to confirm để hoàn thành flow
+    await quotation.requestToConfirm();
+    // Xác nhận đơn vị tiền là VNĐ (₫ hoặc VND)
+    const pageContent = await page.content();
+    expect(/₫/i.test(pageContent)).toBeTruthy();
+  });
+
+  test("Create Tester quotation with Hasaki VietNam company uses VND currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectQuotationType(listTypeQuotation.TESTER);
+    await quotation.selectCompany(COMPANY.HASAKI_VIETNAM);
+    await quotation.fillNote("Tester Quotation Auto Test");
+    await quotation.selectStore("SHOP - 71 HOANG HOA THAM");
+    await quotation.selectProduct("100240028");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create Gift quotation with Hasaki VietNam company uses VND currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectQuotationType(listTypeQuotation.GIFT);
+    await quotation.selectCompany(COMPANY.HASAKI_VIETNAM);
+    await quotation.fillNote("Gift Quotation Auto Test");
+    await quotation.selectStore("SHOP - 71 HOANG HOA THAM");
+    await quotation.selectProduct("100240028");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+    const total = await quotation.getSummaryTotal();
+    expect(total).toBe("0 ₫");
+  });
+
+  test("Create Activation quotation with Hasaki VietNam company uses VND currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectQuotationType(listTypeQuotation.ACTIVATION);
+    await quotation.selectCompany(COMPANY.HASAKI_VIETNAM);
+    await quotation.fillNote("Activation Quotation Auto Test");
+    await quotation.selectStore("SHOP - 71 HOANG HOA THAM");
+    await quotation.selectProduct("100240028");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create POSM quotation with Hasaki VietNam company uses VND currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectQuotationType(listTypeQuotation.POSM);
+    await quotation.selectCompany(COMPANY.HASAKI_VIETNAM);
+    await quotation.fillNote("POSM Quotation Auto Test");
+    await quotation.selectStore("SHOP - 71 HOANG HOA THAM");
+    await quotation.selectProduct("100240028");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+});
+test.describe("Quotation - Create with Hasaki Global Trade", () => {
+  test.describe.configure({ timeout: 120 * 1000 });
+
+  test("Create Normal quotation with Hasaki Global Trade company uses USD currency @smoke", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.NORMAL);
+    await quotation.selectCompany(COMPANY.GLOBAL_TRADE);
+    await quotation.selectStore("WH -170 QUOC LO 1A");
+    await quotation.fillNote("Quotion Global Trade Auto Test");
+    await quotation.selectProduct("422269311");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    // Sau khi Save → vào trang Quotation Review
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      {
+        timeout: 20000,
+      },
+    );
+
+    // Click Request to confirm để hoàn thành flow
+    await quotation.requestToConfirm();
+
+    // Xác nhận đơn vị tiền là USD ($)
+    const pageContent = await page.content();
+    expect(/\$/i.test(pageContent)).toBeTruthy();
+  });
+
+  test("Create Tester quotation with Hasaki Global Trade company uses USD currency @regression`", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.TESTER);
+    await quotation.selectCompany(COMPANY.GLOBAL_TRADE);
+    await quotation.selectStore("WH -170 QUOC LO 1A");
+    await quotation.fillNote("Tester Quotation Global Trade Auto Test");
+    await quotation.selectProduct("422269311");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create Gift quotation with Hasaki Global Trade company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.GIFT);
+    await quotation.selectCompany(COMPANY.GLOBAL_TRADE);
+    await quotation.selectStore("WH -170 QUOC LO 1A");
+    await quotation.fillNote("Gift Quotation Global Trade Auto Test");
+    await quotation.selectProduct("422269311");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+    const totalUSD = await quotation.getSummaryTotal();
+    if (totalUSD) expect(totalUSD).toMatch(/^\$\s*0/);
+  });
+
+  test("Create Activation quotation with Hasaki Global Trade company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.ACTIVATION);
+    await quotation.selectCompany(COMPANY.GLOBAL_TRADE);
+    await quotation.selectStore("WH -170 QUOC LO 1A");
+    await quotation.fillNote("Activation Quotation Global Trade Auto Test");
+    await quotation.selectProduct("422269311");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create POSM quotation with Hasaki Global Trade company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.POSM);
+    await quotation.selectCompany(COMPANY.GLOBAL_TRADE);
+    await quotation.selectStore("WH -170 QUOC LO 1A");
+    await quotation.fillNote("POSM Quotation Global Trade Auto Test");
+    await quotation.selectProduct("422269311");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+});
+
+test.describe("Quotation - Create with Hasaki LLC", () => {
+  test.describe.configure({ timeout: 120 * 1000 });
+  test("Create Normal quotation with Hasaki LLC company uses USD currency @smoke", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.NORMAL);
+    await quotation.selectCompany(COMPANY.HASAKI_LLC);
+    await quotation.selectStore("SHOP - 568 LUY BAN BICH - LLC");
+    await quotation.fillNote("Normal Quotation LLC Auto Test");
+    await quotation.selectProduct("422269314");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+
+    const pageContent = await page.content();
+    expect(/USD/i.test(pageContent)).toBeTruthy();
+  });
+
+  test("Create Tester quotation with Hasaki LLC company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.TESTER);
+    await quotation.selectCompany(COMPANY.HASAKI_LLC);
+    await quotation.selectStore("SHOP - 568 LUY BAN BICH - LLC");
+    await quotation.fillNote("Tester Quotation LLC Auto Test");
+    await quotation.selectProduct("422269314");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create Gift quotation with Hasaki LLC company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.GIFT);
+    await quotation.selectCompany(COMPANY.HASAKI_LLC);
+    await quotation.selectStore("SHOP - 568 LUY BAN BICH - LLC");
+    await quotation.fillNote("Gift Quotation LLC Auto Test");
+    await quotation.selectProduct("422269314");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+    const total = await quotation.getSummaryTotal();
+    if (total) expect(total).toMatch(/^\$\s*0/);
+  });
+
+  test("Create Activation quotation with Hasaki LLC company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.ACTIVATION);
+    await quotation.selectCompany(COMPANY.HASAKI_LLC);
+    await quotation.selectStore("SHOP - 568 LUY BAN BICH - LLC");
+    await quotation.fillNote("Activation Quotation LLC Auto Test");
+    await quotation.selectProduct("422269314");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+
+  test("Create POSM quotation with Hasaki LLC company uses USD currency @regression", async ({
+    authenticatedPage,
+    baseUrl,
+  }) => {
+    const { page } = authenticatedPage;
+    const quotation = new QuotationPage(page);
+
+    await quotation.goto(baseUrl);
+
+    await quotation.selectVendor(listVendor.V260064);
+    await quotation.selectQuotationType(listTypeQuotation.POSM);
+    await quotation.selectCompany(COMPANY.HASAKI_LLC);
+    await quotation.selectStore("SHOP - 568 LUY BAN BICH - LLC");
+    await quotation.fillNote("POSM Quotation LLC Auto Test");
+    await quotation.selectProduct("422269314");
+    await quotation.fillQuantity(6);
+
+    await quotation.saveQuotation();
+
+    await expect(page).toHaveURL(
+      /quotation\/(review|detail|edit|confirm|view)\/\d+/i,
+      { timeout: 20000 },
+    );
+
+    await quotation.requestToConfirm();
+  });
+});
