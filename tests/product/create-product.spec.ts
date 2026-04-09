@@ -9,6 +9,7 @@ const productFilePath = path.resolve(
   __dirname,
   "../resources/avatar-black.png",
 );
+const pdfFilePath = path.resolve(__dirname, "../resources/sample.pdf");
 
 // ─── Shared test data (vendor & brand must exist in the system) ───────────────
 const listVendor = {
@@ -38,6 +39,7 @@ test.describe("Product - Create new product", () => {
     const width = faker.number.int({ min: 10, max: 99 });
     const height = faker.number.int({ min: 10, max: 99 });
     const weight = faker.number.int({ min: 10, max: 99 });
+    const declarationCode = `DC-${faker.string.alphanumeric(8).toUpperCase()}`;
 
     // ─── Navigate ───────────────────────────────────────────────────────────
     await product.goto(baseUrl);
@@ -71,6 +73,26 @@ test.describe("Product - Create new product", () => {
     );
 
     // ─── Tab 2: Images ──────────────────────────────────────────────────────
-    await product.uploadProductImages(productFilePath);
+    await product.uploadMultipleProductImages([
+      productFilePath,
+      productFilePath,
+    ]);
+    await product.saveAndNextToDocumentTab();
+
+    await product.declarationDateInputFill();
+    await product.expirationDateInputFill();
+    await product.declarationCodeInputFill(declarationCode);
+    await product.uploadDocument(pdfFilePath);
+
+    await product.saveAndNextToLinkTab();
+    expect(page.url()).toContain("tab=link_ref");
+
+    await product.clickRequestToApprove();
+
+    await expect(
+      page.locator("span.position-relative.ms-2.badge.badge-warning"),
+    ).toHaveText("Waiting Approve", {
+      timeout: 15000,
+    });
   });
 });

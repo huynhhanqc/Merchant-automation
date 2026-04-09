@@ -1,5 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import { expect } from "@playwright/test";
+import { request } from "http";
 
 export class ProductPage {
   // Inputs — Product Info tab
@@ -17,9 +18,16 @@ export class ProductPage {
 
   // Buttons
   readonly saveAndNextButton: Locator;
+  readonly requestToApproveButton: Locator;
+
+  // Elements liên quan upload ảnh sản phẩm trên tab Image
   readonly upLoadBtn: Locator;
   readonly cropModal: Locator;
   readonly cropBtn: Locator;
+
+  readonly declarationDateInput: Locator;
+  readonly expirationDateInput: Locator;
+  readonly declarationCodeInput: Locator;
 
   constructor(public readonly page: Page) {
     this.nameInput = page.locator("#name");
@@ -33,11 +41,22 @@ export class ProductPage {
     this.widthInput = page.locator("#width");
     this.heightInput = page.locator("#height");
     this.weightInput = page.locator("#weight");
+
+    // Elements liên quan upload ảnh sản phẩm trên tab Image
     this.upLoadBtn = page.locator("#open-image-cropper");
     this.cropModal = page.locator("#modal-image-cropper");
     this.cropBtn = page.locator("#crop-image");
 
+    // Elements liên quan trên tab Document
+    this.declarationDateInput = page.locator("#announce_date");
+    this.expirationDateInput = page.locator("#expiration_date_display");
+    this.declarationCodeInput = page.locator("#announce_code");
+
+    // button "Save & Next" chung cho cả 2 tab, nên khai báo ở đây để dùng lại
     this.saveAndNextButton = page.getByRole("button", { name: "Save & Next" });
+    this.requestToApproveButton = page.getByRole("button", {
+      name: " Request to approve",
+    });
   }
 
   async goto(baseUrl: string) {
@@ -248,6 +267,7 @@ export class ProductPage {
     await this.page.waitForTimeout(200); // fix animation
   }
 
+  // upload có retry nếu thất bại (thường do modal crop bị lỗi JS hoặc timeout)
   async uploadProductImages(filePath: string, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
@@ -295,13 +315,71 @@ export class ProductPage {
     }
   }
 
+  // upload nhiều ảnh cùng lúc (nếu hệ thống cho phép chọn nhiều file trong dialog)
+  async uploadMultipleProductImages(filePaths: string[]) {
+    for (const file of filePaths) {
+      await this.uploadProductImages(file);
+    }
+  }
+
   /** Click nút để chuyển sang tab Document */
-  async goToDocumentTab() {
+  async saveAndNextToDocumentTab() {
     await this.saveAndNextButton.click();
     await this.page.waitForSelector(
       ".nav-link.active, .nav-item.active, li.active > a",
       { state: "visible", timeout: 20000 },
     );
+  }
+
+  async declarationDateInputFill() {
+    await this.declarationDateInput.waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
+
+    // Retry click đến khi calendar mở (flaky vì animation/timing)
+    const todayCell = this.page.locator(".flatpickr-day.today");
+    for (let i = 0; i < 3; i++) {
+      await this.declarationDateInput.click();
+      try {
+        await todayCell.waitFor({ state: "visible", timeout: 3000 });
+        break;
+      } catch {
+        // calendar chưa mở → click lại
+      }
+    }
+    await todayCell.click();
+  }
+
+  async expirationDateInputFill() {
+    await this.expirationDateInput.waitFor({
+      state: "visible",
+      timeout: 15000,
+    });
+
+    // Retry click đến khi daterangepicker mở
+    const picker = this.page.locator(".daterangepicker");
+    for (let i = 0; i < 3; i++) {
+      await this.expirationDateInput.click();
+      try {
+        await picker.waitFor({ state: "visible", timeout: 3000 });
+        break;
+      } catch {
+        // picker chưa mở → click lại
+      }
+    }
+
+    // Lấy tất cả preset range, bỏ "Custom Range"
+    const presets = this.page.locator(
+      ".daterangepicker .ranges li:not([data-range-key='Custom Range'])",
+    );
+    const allPresets = await presets.all();
+
+    if (allPresets.length === 0) throw new Error("No preset ranges available");
+
+    // Chọn ngẫu nhiên 1 preset
+    const picked = allPresets[Math.floor(Math.random() * allPresets.length)]!;
+    await picked.click();
   }
 
   /** Upload file document trên tab Document */
@@ -313,5 +391,21 @@ export class ProductPage {
       .locator(".upload-progress, .uploading")
       .waitFor({ state: "hidden", timeout: 20000 })
       .catch(() => null);
+  }
+
+  async declarationCodeInputFill(code: string) {
+    await this.declarationCodeInput.fill(code);
+  }
+
+  async saveAndNextToLinkTab() {
+    await this.saveAndNextButton.click();
+  }
+
+  /** Click "Request to approve" trên tab Document */
+  async clickRequestToApprove() {
+    await this.page.waitForLoadState("networkidle");
+    // Chấp nhận native browser confirm dialog "Are you sure to request approve?"
+    this.page.once("dialog", (dialog) => dialog.accept());
+    await this.requestToApproveButton.click();
   }
 }
