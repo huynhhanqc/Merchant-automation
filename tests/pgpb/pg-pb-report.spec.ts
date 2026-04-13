@@ -1,5 +1,5 @@
-import { PgPbReportPage } from "../../pages/pgpb/PgPbReportPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { PgPbReportPage } from "../../pages/pgpb/PgPbReportPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("pgpb - PgPbReportPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

@@ -1,5 +1,5 @@
-import { WorkSchedulePage } from "../../pages/pgpb/WorkSchedulePage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { WorkSchedulePage } from "../../pages/pgpb/WorkSchedulePage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("pgpb - WorkSchedulePage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

@@ -1,8 +1,8 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { faker } from "@faker-js/faker";
-import { test, expect } from "../../fixtures/index.js";
-import { ProductPage } from "../../pages/product/ProductPage.js";
+import { test, expect } from "../../fixtures/index.ts";
+import { ProductPage } from "../../pages/product/ProductPage.ts";
 import type { Page } from "@playwright/test";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

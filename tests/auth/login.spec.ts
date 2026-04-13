@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { config as loadEnv } from "dotenv";
-import { LoginPage } from "../../pages/auth/LoginPage.js";
+import { LoginPage } from "../../pages/auth/LoginPage.ts";
 
 loadEnv();
 

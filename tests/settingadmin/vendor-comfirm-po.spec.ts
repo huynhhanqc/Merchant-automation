@@ -1,5 +1,5 @@
-import { VendorConfirmPoPage } from "../../pages/settingadmin/VendorComfirmPoPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { VendorConfirmPoPage } from "../../pages/settingadmin/VendorComfirmPoPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("settingadmin - VendorConfirmPoPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

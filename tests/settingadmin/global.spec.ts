@@ -1,5 +1,5 @@
-import { GlobalPage } from "../../pages/settingadmin/GlobalPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { GlobalPage } from "../../pages/settingadmin/GlobalPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("settingadmin - GlobalPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

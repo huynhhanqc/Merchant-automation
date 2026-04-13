@@ -1,5 +1,5 @@
-import { PurchaseOrderPage } from "../../pages/purchase/PurchaseOrderPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { PurchaseOrderPage } from "../../pages/purchase/PurchaseOrderPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("purchase - PurchaseOrderPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

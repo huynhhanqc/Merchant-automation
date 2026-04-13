@@ -1,5 +1,5 @@
-import { AddNewUserPage } from "../../pages/users/AddNewUserPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { AddNewUserPage } from "../../pages/users/AddNewUserPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("users - AddNewUserPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

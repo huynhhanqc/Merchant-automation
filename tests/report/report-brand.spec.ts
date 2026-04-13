@@ -1,5 +1,5 @@
-import { ReportBrandPage } from "../../pages/report/ReportBrandPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ReportBrandPage } from "../../pages/report/ReportBrandPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("report - ReportBrandPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

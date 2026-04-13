@@ -3,45 +3,45 @@
  * Thay thế hàm createAuthenticatedPage() lặp lại trong mỗi test file
  *
  * Cách dùng:
- *   import { test, expect } from "../../fixtures/index.js";
+ *   import { test, expect } from "../../fixtures/index.ts";
  *   test("my test", async ({ authenticatedPage }) => { ... });
  */
 import { test as base, expect, type Browser } from "@playwright/test";
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
-import { CreateQuotationPage } from "../pages/quotation/QuotationPage.js";
-import { PgStaffPage } from "../pages/pgpb/PgStaffPage.js";
-import { ProductPage } from "../pages/product/ProductPage.js";
-import { LoginPage } from "../pages/auth/LoginPage.js";
-import { AddBookingPage } from "../pages/bookingservice/AddBookingPage.js";
-import { AddProductPosmPage } from "../pages/bookingservice/AddProductPosmPage.js";
-import { ListBookingPage } from "../pages/bookingservice/ListBookingPage.js";
-import { ListProductPosmPage } from "../pages/bookingservice/ListProductPosmPage.js";
-import { AddNewCoursePage } from "../pages/courses/AddNewCoursePage.js";
-import { AddNewLessonPage } from "../pages/courses/AddNewLessonPage.js";
-import { ListCoursePage } from "../pages/courses/ListCoursePage.js";
-import { ListLessonPage } from "../pages/courses/ListLessonPage.js";
-import { GenQrCodeLogsPage } from "../pages/logsadmin/GenQrCodeLogsPage.js";
-import { SentApiLogsPage } from "../pages/logsadmin/SentApiLogsPage.js";
-import { PgPbReportPage } from "../pages/pgpb/PgPbReportPage.js";
-import { ListPgPbPage } from "../pages/pgpb/PgPbListPage.js";
-import { WorkSchedulePage } from "../pages/pgpb/WorkSchedulePage.js";
-import { ProductListPage } from "../pages/product/ProductListPage.js";
-import { PurchaseOrderPage } from "../pages/purchase/PurchaseOrderPage.js";
-import { PoDeliveryPage } from "../pages/purchase/PoDeliveryPage.js";
-import { ConfirmPoImportPage } from "../pages/purchase/ConfirmPoImportPage.js";
-import { ReportBrandPage } from "../pages/report/ReportBrandPage.js";
-import { ReportSalesPage } from "../pages/report/ReportSalesPage.js";
-import { ReportStocksPage } from "../pages/report/ReportStocksPage.js";
-import { ListReturnPage } from "../pages/returnproduct/ListReturn.js";
-import { GlobalPage } from "../pages/settingadmin/GlobalPage.js";
-import { VendorConfirmPoPage } from "../pages/settingadmin/VendorComfirmPoPage.js";
-import { ListUserPage } from "../pages/users/ListUserPage.js";
-import { ListRegisterPage } from "../pages/users/ListRegisterPage.js";
-import { AddNewUserPage } from "../pages/users/AddNewUserPage.js";
-import { FastRegisterPage } from "../pages/users/FastRegisterPage.js";
-import { ListVendorPage } from "../pages/vendors/ListVendorPage.js";
+import { CreateQuotationPage } from "../pages/quotation/QuotationPage.ts";
+import { PgStaffPage } from "../pages/pgpb/PgStaffPage.ts";
+import { ProductPage } from "../pages/product/ProductPage.ts";
+import { LoginPage } from "../pages/auth/LoginPage.ts";
+import { AddBookingPage } from "../pages/bookingservice/AddBookingPage.ts";
+import { AddProductPosmPage } from "../pages/bookingservice/AddProductPosmPage.ts";
+import { ListBookingPage } from "../pages/bookingservice/ListBookingPage.ts";
+import { ListProductPosmPage } from "../pages/bookingservice/ListProductPosmPage.ts";
+import { AddNewCoursePage } from "../pages/courses/AddNewCoursePage.ts";
+import { AddNewLessonPage } from "../pages/courses/AddNewLessonPage.ts";
+import { ListCoursePage } from "../pages/courses/ListCoursePage.ts";
+import { ListLessonPage } from "../pages/courses/ListLessonPage.ts";
+import { GenQrCodeLogsPage } from "../pages/logsadmin/GenQrCodeLogsPage.ts";
+import { SentApiLogsPage } from "../pages/logsadmin/SentApiLogsPage.ts";
+import { PgPbReportPage } from "../pages/pgpb/PgPbReportPage.ts";
+import { ListPgPbPage } from "../pages/pgpb/PgPbListPage.ts";
+import { WorkSchedulePage } from "../pages/pgpb/WorkSchedulePage.ts";
+import { ProductListPage } from "../pages/product/ProductListPage.ts";
+import { PurchaseOrderPage } from "../pages/purchase/PurchaseOrderPage.ts";
+import { PoDeliveryPage } from "../pages/purchase/PoDeliveryPage.ts";
+import { ConfirmPoImportPage } from "../pages/purchase/ConfirmPoImportPage.ts";
+import { ReportBrandPage } from "../pages/report/ReportBrandPage.ts";
+import { ReportSalesPage } from "../pages/report/ReportSalesPage.ts";
+import { ReportStocksPage } from "../pages/report/ReportStocksPage.ts";
+import { ListReturnPage } from "../pages/returnproduct/ListReturn.ts";
+import { GlobalPage } from "../pages/settingadmin/GlobalPage.ts";
+import { VendorConfirmPoPage } from "../pages/settingadmin/VendorComfirmPoPage.ts";
+import { ListUserPage } from "../pages/users/ListUserPage.ts";
+import { ListRegisterPage } from "../pages/users/ListRegisterPage.ts";
+import { AddNewUserPage } from "../pages/users/AddNewUserPage.ts";
+import { FastRegisterPage } from "../pages/users/FastRegisterPage.ts";
+import { ListVendorPage } from "../pages/vendors/ListVendorPage.ts";
 
 //
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -61,7 +61,7 @@ type AuthFixtures = {
       ReturnType<Awaited<ReturnType<Browser["newContext"]>>["newPage"]>
     >;
   };
-  quotationPage: CreateQuotationPage;
+  createQuotationPage: CreateQuotationPage;
   pgStaffPage: PgStaffPage;
   productPage: ProductPage;
   addBookingPage: AddBookingPage;
@@ -304,10 +304,10 @@ export const test = base.extend<AuthFixtures>({
   },
 
   // Quotation Index Page
-  quotationPage: async ({ authenticatedPage, baseUrl }, use) => {
-    const quotation = new CreateQuotationPage(authenticatedPage.page);
-    await quotation.goto(baseUrl);
-    await use(quotation);
+  createQuotationPage: async ({ authenticatedPage, baseUrl }, use) => {
+    const createQuotation = new CreateQuotationPage(authenticatedPage.page);
+    await createQuotation.goto(baseUrl);
+    await use(createQuotation);
   },
 
   // PgPb Index Page

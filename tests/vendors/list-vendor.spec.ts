@@ -1,5 +1,5 @@
-import { ListVendorPage } from "../../pages/vendors/ListVendorPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ListVendorPage } from "../../pages/vendors/ListVendorPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("vendors - ListVendorPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

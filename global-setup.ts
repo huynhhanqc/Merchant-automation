@@ -9,7 +9,7 @@ import { config as loadEnv } from "dotenv";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { LoginPage } from "./pages/auth/LoginPage.js";
+import { LoginPage } from "./pages/auth/LoginPage.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadEnv({ path: path.resolve(__dirname, ".env.local") });

@@ -1,5 +1,5 @@
-import { ConfirmPoImportPage } from "../../pages/purchase/ConfirmPoImportPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ConfirmPoImportPage } from "../../pages/purchase/ConfirmPoImportPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("purchase - ConfirmPoImportPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

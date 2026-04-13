@@ -1,5 +1,5 @@
-import { FastRegisterPage } from "../../pages/users/FastRegisterPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { FastRegisterPage } from "../../pages/users/FastRegisterPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("users - FastRegisterPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

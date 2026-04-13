@@ -1,5 +1,5 @@
-import { SentApiLogsPage } from "../../pages/logsadmin/SentApiLogsPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { SentApiLogsPage } from "../../pages/logsadmin/SentApiLogsPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("logsadmin - SentApiLogsPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

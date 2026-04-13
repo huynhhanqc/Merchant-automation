@@ -1,5 +1,5 @@
-import { ListReturnPage } from "../../pages/returnproduct/ListReturn.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ListReturnPage } from "../../pages/returnproduct/ListReturn.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("returnproduct - ListReturn Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

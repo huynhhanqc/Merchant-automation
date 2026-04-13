@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { fileURLToPath } from "url";
 import path from "path";
-import { test, expect } from "../../fixtures/index.js";
-import { PgStaffPage } from "../../pages/pgpb/PgStaffPage.js";
+import { test, expect } from "../../fixtures/index.ts";
+import { PgStaffPage } from "../../pages/pgpb/PgStaffPage.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const avatarFilePath = path.resolve(

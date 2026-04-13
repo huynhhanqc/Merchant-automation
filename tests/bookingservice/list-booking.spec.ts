@@ -1,5 +1,5 @@
-import { ListBookingPage } from "../../pages/bookingservice/ListBookingPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ListBookingPage } from "../../pages/bookingservice/ListBookingPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("bookingservice - ListBookingPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

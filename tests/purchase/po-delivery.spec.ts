@@ -1,5 +1,5 @@
-import { PoDeliveryPage } from "../../pages/purchase/PoDeliveryPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { PoDeliveryPage } from "../../pages/purchase/PoDeliveryPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("purchase - PoDeliveryPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

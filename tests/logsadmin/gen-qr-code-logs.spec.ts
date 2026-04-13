@@ -1,5 +1,5 @@
-import { GenQrCodeLogsPage } from "../../pages/logsadmin/GenQrCodeLogsPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { GenQrCodeLogsPage } from "../../pages/logsadmin/GenQrCodeLogsPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("logsadmin - GenQrCodeLogsPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

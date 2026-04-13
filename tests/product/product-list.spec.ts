@@ -1,5 +1,5 @@
-import { ProductListPage } from "../../pages/product/ProductListPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { ProductListPage } from "../../pages/product/ProductListPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("product - ProductListPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

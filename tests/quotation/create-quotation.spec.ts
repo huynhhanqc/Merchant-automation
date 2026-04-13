@@ -1,5 +1,5 @@
-import { test, expect } from "../../fixtures/index.js";
-import { CreateQuotationPage } from "../../pages/quotation/QuotationPage.js";
+import { test, expect } from "../../fixtures/index.ts";
+import { CreateQuotationPage } from "../../pages/quotation/QuotationPage.ts";
 
 // Tên company
 const COMPANY = {

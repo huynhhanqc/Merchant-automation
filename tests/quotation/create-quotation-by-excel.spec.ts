@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import { test, expect } from "../../fixtures/index.js";
-import { QuotationExcelPage } from "../../pages/quotation/QuotationExcelPage.js";
+import { test, expect } from "../../fixtures/index.ts";
+import { QuotationExcelPage } from "../../pages/quotation/QuotationExcelPage.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const excelBarcodeFilePath = path.resolve(

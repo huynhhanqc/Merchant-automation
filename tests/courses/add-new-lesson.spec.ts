@@ -1,5 +1,5 @@
-import { AddNewLessonPage } from "../../pages/courses/AddNewLessonPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { AddNewLessonPage } from "../../pages/courses/AddNewLessonPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("courses - AddNewLessonPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });

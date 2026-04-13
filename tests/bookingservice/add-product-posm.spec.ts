@@ -1,5 +1,5 @@
-import { AddProductPosmPage } from "../../pages/bookingservice/AddProductPosmPage.js";
-import { test, expect } from "../../fixtures/index.js";
+import { AddProductPosmPage } from "../../pages/bookingservice/AddProductPosmPage.ts";
+import { test, expect } from "../../fixtures/index.ts";
 
 test.describe("bookingservice - AddProductPosmPage Navigate", () => {
   test.describe.configure({ timeout: 60 * 1000 });
