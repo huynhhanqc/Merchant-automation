@@ -6,9 +6,9 @@ test.describe("purchase - PoDeliveryPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new PoDeliveryPage(page);
+    const poDelivery = new PoDeliveryPage(page);
 
-    await pageObject.goto(baseUrl);
+    await poDelivery.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/PO Delivery/i, {
       timeout: 10000,

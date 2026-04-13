@@ -6,9 +6,9 @@ test.describe("logsadmin - SentApiLogsPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new SentApiLogsPage(page);
+    const sentApiLogs = new SentApiLogsPage(page);
 
-    await pageObject.goto(baseUrl);
+    await sentApiLogs.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Sent API Logs/i, {
       timeout: 10000,

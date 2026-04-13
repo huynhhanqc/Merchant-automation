@@ -6,9 +6,9 @@ test.describe("logsadmin - GenQrCodeLogsPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new GenQrCodeLogsPage(page);
+    const genQrCodeLogs = new GenQrCodeLogsPage(page);
 
-    await pageObject.goto(baseUrl);
+    await genQrCodeLogs.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /Gen QR Code Promoter Logs/i,

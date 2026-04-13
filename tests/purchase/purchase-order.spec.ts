@@ -6,9 +6,9 @@ test.describe("purchase - PurchaseOrderPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new PurchaseOrderPage(page);
+    const purchaseOrder = new PurchaseOrderPage(page);
 
-    await pageObject.goto(baseUrl);
+    await purchaseOrder.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Purchase Order/i, {
       timeout: 10000,

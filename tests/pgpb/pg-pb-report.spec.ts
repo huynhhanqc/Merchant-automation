@@ -6,9 +6,9 @@ test.describe("pgpb - PgPbReportPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new PgPbReportPage(page);
+    const pgpbReport = new PgPbReportPage(page);
 
-    await pageObject.goto(baseUrl);
+    await pgpbReport.goto(baseUrl);
 
     await expect(page.locator(".page-title h1")).toContainText(
       /PG\/PB Report/i,

@@ -2,7 +2,7 @@ pipeline {
   agent {
     // Dùng Docker image Playwright chính thức — có sẵn browsers + dependencies
     docker {
-      image 'mcr.microsoft.com/playwright:v1.49.0-jammy'
+      image 'mcr.microsoft.com/playwright:v1.59.1-jammy'
       args '--ipc=host'
     }
   }

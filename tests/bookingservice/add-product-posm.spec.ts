@@ -6,9 +6,9 @@ test.describe("bookingservice - AddProductPosmPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new AddProductPosmPage(page);
+    const addProductPosm = new AddProductPosmPage(page);
 
-    await pageObject.goto(baseUrl);
+    await addProductPosm.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /Add new Product POSM/i,

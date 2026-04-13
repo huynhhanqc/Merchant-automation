@@ -6,9 +6,9 @@ test.describe("courses - AddNewCoursePage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new AddNewCoursePage(page);
+    const addNewCourse = new AddNewCoursePage(page);
 
-    await pageObject.goto(baseUrl);
+    await addNewCourse.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Add new Course/i, {
       timeout: 10000,

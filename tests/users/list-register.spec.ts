@@ -6,9 +6,9 @@ test.describe("users - ListRegisterPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new ListRegisterPage(page);
+    const listRegister = new ListRegisterPage(page);
 
-    await pageObject.goto(baseUrl);
+    await listRegister.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /Register Vendor List/i,

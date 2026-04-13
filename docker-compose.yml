@@ -1,0 +1,14 @@
+services:
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: web-merchant-playwright:1.59.1
+    env_file:
+      - .env.local
+    environment:
+      CI: "true"
+    command: sh -c "npx playwright test $${TEST_ARGS:-}"
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results

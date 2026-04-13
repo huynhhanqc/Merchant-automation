@@ -6,9 +6,9 @@ test.describe("settingadmin - GlobalPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new GlobalPage(page);
+    const global = new GlobalPage(page);
 
-    await pageObject.goto(baseUrl);
+    await global.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Global Setting/i, {
       timeout: 10000,

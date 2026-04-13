@@ -6,9 +6,9 @@ test.describe("report - ReportSalesPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new ReportSalesPage(page);
+    const reportSales = new ReportSalesPage(page);
 
-    await pageObject.goto(baseUrl);
+    await reportSales.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Report Sales/i, {
       timeout: 10000,

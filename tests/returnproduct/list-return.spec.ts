@@ -6,9 +6,9 @@ test.describe("returnproduct - ListReturn Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new ListReturnPage(page);
+    const listReturn = new ListReturnPage(page);
 
-    await pageObject.goto(baseUrl);
+    await listReturn.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Return Product/i, {
       timeout: 10000,

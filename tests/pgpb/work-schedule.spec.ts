@@ -6,9 +6,9 @@ test.describe("pgpb - WorkSchedulePage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new WorkSchedulePage(page);
+    const workSchedule = new WorkSchedulePage(page);
 
-    await pageObject.goto(baseUrl);
+    await workSchedule.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Work Schedule/i, {
       timeout: 10000,

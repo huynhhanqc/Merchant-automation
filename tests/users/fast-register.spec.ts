@@ -6,9 +6,9 @@ test.describe("users - FastRegisterPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new FastRegisterPage(page);
+    const fastRegister = new FastRegisterPage(page);
 
-    await pageObject.goto(baseUrl);
+    await fastRegister.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(/Add new User/i, {
       timeout: 10000,

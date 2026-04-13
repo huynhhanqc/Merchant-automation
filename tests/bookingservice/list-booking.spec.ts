@@ -6,9 +6,9 @@ test.describe("bookingservice - ListBookingPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new ListBookingPage(page);
+    const listBooking = new ListBookingPage(page);
 
-    await pageObject.goto(baseUrl);
+    await listBooking.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /List Booking Service/i,

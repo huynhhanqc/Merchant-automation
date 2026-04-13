@@ -6,9 +6,9 @@ test.describe("settingadmin - VendorConfirmPoPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new VendorConfirmPoPage(page);
+    const vendorConfirmPo = new VendorConfirmPoPage(page);
 
-    await pageObject.goto(baseUrl);
+    await vendorConfirmPo.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /Vendor Confirm PO Pending/i,

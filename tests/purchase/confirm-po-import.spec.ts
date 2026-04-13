@@ -6,9 +6,9 @@ test.describe("purchase - ConfirmPoImportPage Navigate", () => {
 
   test("Navigate @smoke", async ({ authenticatedPage, baseUrl }) => {
     const { page } = authenticatedPage;
-    const pageObject = new ConfirmPoImportPage(page);
+    const confirmPoImport = new ConfirmPoImportPage(page);
 
-    await pageObject.goto(baseUrl);
+    await confirmPoImport.goto(baseUrl);
 
     await expect(page.locator(".page-title")).toContainText(
       /Verify Purchase Order/i,
